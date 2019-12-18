@@ -27,12 +27,12 @@ const Plot = props => {
         parent: { border: "1px solid #ccc"}
       }}
       data={data} />);
-    a.push(<VictoryLine key={2}
-      style={{
-        data: { stroke: "#ccc" },
-        parent: { border: "1px solid #ccc"}
-      }}
-      data={data2} />);
+    // a.push(<VictoryLine key={2}
+    //   style={{
+    //     data: { stroke: "#ccc" },
+    //     parent: { border: "1px solid #ccc"}
+    //   }}
+    //   data={data2} />);
     return a;
   }
 

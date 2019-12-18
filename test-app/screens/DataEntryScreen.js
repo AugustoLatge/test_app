@@ -4,7 +4,9 @@ import { View, Button, Text, StyleSheet } from 'react-native';
 import yamamotoSteadyStateModel from '../functions/yamamotoSteadyStateModel';
 import oneCompartmentSingleDoseSteadyStateModel from '../functions/oneCompartmentSingleDoseSteadyStateModel';
 import oneCompartmentMultiDoseModel from '../functions/oneCompartmentMultiDoseModel';
+import yamamotoFunctionPartialSSearlyStop from '../functions/yamamotoFunctionPartialSSearlyStop';
 import yamamotoFunctionPartial from '../functions/yamamotoFunctionPartial';
+import ode1SSearlyStop from '../functions/ode1SSearlyStop';
 import ode1 from '../functions/ode1';
 import Plot from '../components/Plot';
 import TestView from '../components/TestView';
@@ -23,21 +25,51 @@ const DataEntryScreen = props => {
 
   // var CRCL = 100,
   //     WT = 70,
-  //     tD = 0,
-  //     Tinf = 1,
-  //     D = 1000,      
+  //     tDarray = [0],
+  //     Darray = [1000],
+  //     TinfArray = [1],
   //     t0 = 0,
-  //     dt = .001,
-  //     tfinal = 10;
+  //     dt = 1,
+  //     tfinal = 10,
+  //     y0 = [0, 0];
+
+  function fillTDarray(Tau, n) {
+    var t = 0;
+    var tDarray = [t];
+    for (var i = 0; i < n - 1; i++) {
+      t = t + Tau;
+      tDarray.push(t);
+    }
+    return tDarray;
+  };
+
+  function fillDarray(dose, n) {
+    var Darray = [];
+    for (var i = 0; i < n; i++) {
+      Darray.push(dose);
+    }
+    return Darray;
+  };
+
+  function fillTinfArray(Tinf, n) {
+    var TinfArray = [];
+    for (var i = 0; i < n; i++) {
+      TinfArray.push(Tinf);
+    }
+    return TinfArray;
+  };
 
   var CRCL = 100,
       WT = 70,
-      tDarray = [0,10,20,30,40],
-      Darray = [1000,1000,1000,1000,1000],
-      TinfArray = [1,1,1,1,1],
+      nPer = 20,
+      Tau = 24,
+      tDarray = fillTDarray(Tau, nPer),
+      Darray = fillDarray(1000, nPer),
+      TinfArray = fillTinfArray(1, nPer),
       t0 = 0,
       dt = 1,
-      tfinal = 50;
+      tfinal = nPer*Tau,
+      y0 = [0, 0];
 
   var theta = [0,0,0,0,0,0,0,0];
   theta[0] = 3.83;
@@ -61,6 +93,16 @@ const DataEntryScreen = props => {
     TinfArray,
     theta,
     eta);
+
+  // const yamamotoFunction = yamamotoFunctionPartialSSearlyStop(
+  //   CRCL,
+  //   WT,
+  //   tDarray,
+  //   Darray,
+  //   TinfArray,
+  //   theta,
+  //   eta,
+  //   y0);
 
   // // const modelResult = yamamotoSteadyStateModel(
   // const modelResult = oneCompartmentMultiDoseModel(
@@ -108,8 +150,9 @@ const DataEntryScreen = props => {
   //     tfinal = 10,
   //     results = ode1(testFunction, t0, dt, tfinal, y0);
 
-  var y0 = [0, 0],
-      results = ode1(yamamotoFunction, t0, dt, tfinal, y0);
+  var results = ode1(yamamotoFunction, t0, dt, tfinal, y0);
+
+  // var results = ode1SSearlyStop(yamamotoFunction, t0, dt, tfinal, y0);
 
   // const data = [];
 
