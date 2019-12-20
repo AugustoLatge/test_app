@@ -29,13 +29,18 @@ const yamamotoFunctionPartial = (
 
   var doseCounter = 0; // first dose
 
+  // Initializing variables
+  var tD = 0;
+  var D = 0;
+  var Tinf = 0;
+
   return function (t, y) {
 
     // Checking dose characteristics for each dose interval
     if (t === tDarray[doseCounter]) {
-      var tD = tDarray[doseCounter];
-      var D = Darray[doseCounter];
-      var Tinf = TinfArray[doseCounter];
+      tD = tDarray[doseCounter];
+      D = Darray[doseCounter];
+      Tinf = TinfArray[doseCounter];
       doseCounter++;
     }
 

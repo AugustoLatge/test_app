@@ -1,3 +1,8 @@
+import { create, all } from 'mathjs'
+
+const config = { }
+const math = create(all, config)
+
 const ode1 = function (F, t0, dt, tfinal, y0) {
   // ODE1 A simple ODE solver.
   //  result = ODE1(F, t0, dt, tfinal, y0) uses Euler's
@@ -11,11 +16,22 @@ const ode1 = function (F, t0, dt, tfinal, y0) {
 
   var result = [{x: t0, y: y}]; // adding initial conditions
 
+  var nDecCase = 0;
+
+  var dtCases = dt - Math.floor(dt);
+
+  while ( dtCases < 1 ) {
+    nDecCase++;
+    dtCases = dtCases * 10;
+  }
+
   for (var t = t0; t <= tfinal - dt; t = t + dt) {
-    var s = F(t, y);
+    tRound = Number(t.toFixed(nDecCase));
+    var s = F(tRound, y);
     // y = y + dt*s
-    y = y.map((a,i) => a + s.map((x) => x * dt)[i]);
-    result.push({x: t + dt, y: y});   
+    // y = y.map((a,i) => a + s.map((x) => x * dt)[i]);
+    y = math.add(y, math.multiply(s,dt));
+    result.push({x: tRound + dt, y: y});   
   }
 
   return result;

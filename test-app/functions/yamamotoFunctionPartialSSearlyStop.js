@@ -1,4 +1,4 @@
-const yamamotoFunctionPartial = (
+const yamamotoFunctionPartialSSearlyStop = (
   CRCL,
   WT,
   tDarray,
@@ -30,15 +30,20 @@ const yamamotoFunctionPartial = (
 
   var doseCounter = 0; // first dose
 
+  // Initializing variables
+  var tD = 0;
+  var D = 0;
+  var Tinf = 0;
+
   var concAtDoses = [];
 
   return function (t, y) {
 
     // Checking dose characteristics for each dose interval
     if (t === tDarray[doseCounter]) {
-      var tD = tDarray[doseCounter];
-      var D = Darray[doseCounter];
-      var Tinf = TinfArray[doseCounter];
+      tD = tDarray[doseCounter];
+      D = Darray[doseCounter];
+      Tinf = TinfArray[doseCounter];
 
       concAtDoses.push(y);
 
@@ -48,7 +53,7 @@ const yamamotoFunctionPartial = (
         var prevConc = concAtDoses[concAtDoses.length-2][0]; // previous concentration at dose
 
         // If the change of concentration is less than 1% we consider SS
-        if (y[0] - prevConc <= .05 * prevConc) {
+        if (y[0] - prevConc <= .01 * prevConc) {
           return {dydt: dydt, SS: true};
         }
       }
@@ -101,4 +106,4 @@ const yamamotoFunctionPartial = (
   //   dX(n+1:n*2) =  -K21.*X(n+1:n*2)' +K12.*X(1:n)';
 };
 
-export default yamamotoFunctionPartial;
+export default yamamotoFunctionPartialSSearlyStop;

@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Button, Text, StyleSheet } from 'react-native';
+import randomNormal from 'random-normal';
 
 import yamamotoSteadyStateModel from '../functions/yamamotoSteadyStateModel';
 import oneCompartmentSingleDoseSteadyStateModel from '../functions/oneCompartmentSingleDoseSteadyStateModel';
@@ -9,6 +10,7 @@ import yamamotoFunctionPartial from '../functions/yamamotoFunctionPartial';
 import ode1SSearlyStop from '../functions/ode1SSearlyStop';
 import ode1 from '../functions/ode1';
 import Plot from '../components/Plot';
+import PlotTest from '../components/PlotTest';
 import TestView from '../components/TestView';
 
 const DataEntryScreen = props => {
@@ -67,7 +69,7 @@ const DataEntryScreen = props => {
       Darray = fillDarray(1000, nPer),
       TinfArray = fillTinfArray(1, nPer),
       t0 = 0,
-      dt = 1,
+      dt = .1,
       tfinal = nPer*Tau,
       y0 = [0, 0];
 
@@ -83,26 +85,55 @@ const DataEntryScreen = props => {
   theta[6] = 0.143;
   theta[7] = 0;
 
-  var eta = [.375,.182,.192,.728];
+  var omega = [.375,.182,.192,.728];
 
-  const yamamotoFunction = yamamotoFunctionPartial(
-    CRCL,
-    WT,
-    tDarray,
-    Darray,
-    TinfArray,
-    theta,
-    eta);
+  // var randomNormal = require('random-normal');
 
-  // const yamamotoFunction = yamamotoFunctionPartialSSearlyStop(
+  // console.log(randomNormal());
+
+  // var testNormalDist = [];
+
+  // for (var i = 0; i < 10000; i++) {
+  //   testNormalDist.push(randomNormal());
+  // };
+
+  // testNormalDist.sort(function (a, b) {
+  //   if (a > b) {
+  //       return 1;
+  //   }
+  //   if (b > a) {
+  //       return -1;
+  //   }
+  //   return 0;
+  // });
+
+  // testNormalDist = testNormalDist.map((a) => {
+  //   var mu = 0;
+  //   var sigma = 1;
+  //   var result = (1 / (sigma * Math.sqrt(2 * Math.PI))) * Math.exp(-Math.pow((a - mu),2) / (2 * Math.pow(sigma,2)));
+  //   return {x: a, y: result};
+  // });
+
+  var eta = omega.map((a,i) => randomNormal({mean: 0, dev: omega[i]}));
+
+  // const yamamotoFunction = yamamotoFunctionPartial(
   //   CRCL,
   //   WT,
   //   tDarray,
   //   Darray,
   //   TinfArray,
   //   theta,
-  //   eta,
-  //   y0);
+  //   eta);
+
+  const yamamotoFunction = yamamotoFunctionPartialSSearlyStop(
+    CRCL,
+    WT,
+    tDarray,
+    Darray,
+    TinfArray,
+    theta,
+    eta,
+    y0);
 
   // // const modelResult = yamamotoSteadyStateModel(
   // const modelResult = oneCompartmentMultiDoseModel(
@@ -150,9 +181,21 @@ const DataEntryScreen = props => {
   //     tfinal = 10,
   //     results = ode1(testFunction, t0, dt, tfinal, y0);
 
-  var results = ode1(yamamotoFunction, t0, dt, tfinal, y0);
+  // var results = ode1(yamamotoFunction, t0, dt, tfinal, y0);
 
   // var results = ode1SSearlyStop(yamamotoFunction, t0, dt, tfinal, y0);
+
+  var results = [];
+
+  var yValues = [];
+
+  for (var i = 0; i < 20; i++) {
+    yValues.push(i);
+  }
+
+  for (var i = 0; i < 10; i++) {
+      results.push({x: i, y: yValues});
+  }
 
   // const data = [];
 
@@ -163,6 +206,7 @@ const DataEntryScreen = props => {
   return <View style={styles.screen}>
     <Text>Data Screen</Text>
     <Plot data={results}/>
+    {/* <PlotTest data={testNormalDist}/> */}
     {/* <TestView /> */}
     <Button title="Calculation Results" onPress={() => props.navigation.navigate('Results')} />
   </View>

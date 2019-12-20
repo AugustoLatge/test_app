@@ -1,80 +1,68 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { VictoryBar, VictoryChart, VictoryLine, VictoryTheme } from "victory-native";
+import React from "react";
+import { View, Text, StyleSheet } from "react-native";
+import {
+  VictoryBar,
+  VictoryChart,
+  VictoryLine,
+  VictoryTheme
+} from "victory-native";
+
+import generateRGBstring from '../functions/generateRGBstring';
 
 const Plot = props => {
 
-  const moreThanOne = typeof props.data[0].y === "object";
+  const fillLines = fullData => {
+    var moreThanOne = typeof fullData[0].y === "object";
 
-  const fullData = props.data;
+    if (moreThanOne) {
+      var lines = [];
 
-  const data = [];
-  const data2 = [];
+      var dataLength = fullData[0].y.length;
 
-  for (var elem of fullData) {
-    data.push({x: elem.x, y: elem.y[0]});
-  }
+      var colorStringArray = generateRGBstring(dataLength);
 
-  for (var elem of fullData) {
-    data2.push({x: elem.x, y: elem.y[1]});
-  }
+      // For every y dimension (ex.: y = [0, 0] --> two dimensions)
+      for (var i = 0; i < dataLength; i++) {
+        var data = [];
 
-  const f = () => {
-    const a = [];
-    a.push(<VictoryLine key={1}
-      style={{
-        data: { stroke: "#ccc" },
-        parent: { border: "1px solid #ccc"}
-      }}
-      data={data} />);
-    // a.push(<VictoryLine key={2}
-    //   style={{
-    //     data: { stroke: "#ccc" },
-    //     parent: { border: "1px solid #ccc"}
-    //   }}
-    //   data={data2} />);
-    return a;
-  }
+        for (var elem of fullData) {
+          data.push({ x: elem.x, y: elem.y[i] });
+        }
 
-  // <VictoryLine
-  // style={{
-  //   data: { stroke: "#ccc" },
-  //   parent: { border: "1px solid #ccc"}
-  // }}
-  // data={data} />
+        lines.push(
+          <VictoryLine
+            key={i}
+            style={{
+              data: { stroke: colorStringArray[i] },
+              parent: { border: "1px solid #ccc" }
+            }}
+            data={data}
+          />
+        );
+      }
+
+      return lines;
+    } else {
+      return (
+        <VictoryLine
+          style={{
+            data: { stroke: "rgb(57,106,177)" },
+            parent: { border: "1px solid #ccc" }
+          }}
+          data={fullData}
+        />
+      );
+    }
+  };
 
   return (
     <View style={styles.container}>
       <VictoryChart width={350} theme={VictoryTheme.material}>
-        {/* <VictoryBar data={props.data} x="quarter" y="earnings" /> */}
-        
-        {/* <VictoryLine
-          style={{
-            data: { stroke: "#c43a31" },
-            parent: { border: "1px solid #ccc"}
-          }}
-          data={props.data} /> */}
-
-        {/* <VictoryLine
-          style={{
-            data: { stroke: "#ccc" },
-            parent: { border: "1px solid #ccc"}
-          }}
-          data={data} />
-
-        <VictoryLine
-          style={{
-            data: { stroke: "#c43a31" },
-            parent: { border: "1px solid #ccc"}
-          }}
-          data={data2} /> */}
-
-          { f() }
-        
+        {fillLines(props.data)}
       </VictoryChart>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -83,6 +71,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#f5fcff"
   }
-}); 
+});
 
 export default Plot;
