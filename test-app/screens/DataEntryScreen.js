@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Button, Text, StyleSheet } from 'react-native';
 import randomNormal from 'random-normal';
+import { useDispatch } from 'react-redux';
 
 import yamamotoSteadyStateModel from '../functions/yamamotoSteadyStateModel';
 import oneCompartmentSingleDoseSteadyStateModel from '../functions/oneCompartmentSingleDoseSteadyStateModel';
@@ -12,6 +13,7 @@ import ode1 from '../functions/ode1';
 import Plot from '../components/Plot';
 import PlotTest from '../components/PlotTest';
 import TestView from '../components/TestView';
+import { calculate } from '../store/actions/calculate';
 
 const DataEntryScreen = props => {
 
@@ -183,19 +185,25 @@ const DataEntryScreen = props => {
 
   // var results = ode1(yamamotoFunction, t0, dt, tfinal, y0);
 
-  // var results = ode1SSearlyStop(yamamotoFunction, t0, dt, tfinal, y0);
+  var results = ode1SSearlyStop(yamamotoFunction, t0, dt, tfinal, y0);
 
-  var results = [];
+  // var results = [{x: 0, y: 0}, {x: 1, y: 1}];
 
-  var yValues = [];
+  const dispatch = useDispatch();
 
-  for (var i = 0; i < 20; i++) {
-    yValues.push(i);
-  }
+  dispatch(calculate(results));
 
-  for (var i = 0; i < 10; i++) {
-      results.push({x: i, y: yValues});
-  }
+  // var results = [];
+
+  // var yValues = [];
+
+  // for (var i = 0; i < 20; i++) {
+  //   yValues.push(i);
+  // }
+
+  // for (var i = 0; i < 10; i++) {
+  //     results.push({x: i, y: yValues});
+  // }
 
   // const data = [];
 
@@ -205,7 +213,7 @@ const DataEntryScreen = props => {
 
   return <View style={styles.screen}>
     <Text>Data Screen</Text>
-    <Plot data={results}/>
+    {/* <Plot data={results}/> */}
     {/* <PlotTest data={testNormalDist}/> */}
     {/* <TestView /> */}
     <Button title="Calculation Results" onPress={() => props.navigation.navigate('Results')} />
