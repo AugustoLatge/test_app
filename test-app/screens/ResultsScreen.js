@@ -9,8 +9,8 @@ const ResultsScreen = props => {
   const results = useSelector(state => state.calculate.results);
 
   return <View style={styles.screen}>
-    <Plot data={results}/>
     <Text>Results Screen</Text>
+    <Plot data={results}/>    
   </View>
 }
 
