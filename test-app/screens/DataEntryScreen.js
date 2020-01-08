@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Button, Text, StyleSheet, Switch, ScrollView } from 'react-native';
+import { View, Button, Text, StyleSheet, Switch } from 'react-native';
 import randomNormal from 'random-normal';
 import { useDispatch } from 'react-redux';
 
@@ -8,6 +8,7 @@ import yamamotoFunctionPartialSSearlyStop from '../functions/yamamotoFunctionPar
 import yamamotoFunctionPartial from '../functions/yamamotoFunctionPartial';
 import ode1SSearlyStop from '../functions/ode1SSearlyStop';
 import ode1 from '../functions/ode1';
+import DataInput from '../components/DataInput';
 
 import { calculate } from '../store/actions/calculate';
 
@@ -102,7 +103,6 @@ const DataEntryScreen = props => {
 
   return (
     <View style={styles.screen}>
-      {/* <ScrollView /> */}
       <View style={styles.earlyStopSwitch}>
         <Text>Early Stop:</Text>
         <Switch
