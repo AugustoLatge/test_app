@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Button, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Button, Text, StyleSheet, Switch, ScrollView } from 'react-native';
 import randomNormal from 'random-normal';
 import { useDispatch } from 'react-redux';
 
@@ -11,10 +11,9 @@ import ode1 from '../functions/ode1';
 
 import { calculate } from '../store/actions/calculate';
 
-const DataEntryScreen = props => {
-  
-  const earlyStop = false;
+const DataEntryScreen = props => {  
 
+  const [earlyStop, setEarlyStop] = useState(false);
 
   function fillTDarray(Tau, n) {
     var t = 0;
@@ -101,17 +100,39 @@ const DataEntryScreen = props => {
 
   dispatch(calculate(results));
 
-  return <View style={styles.screen}>
-    <Text>Data Screen</Text>
-    <Button title="Calculation Results" onPress={() => props.navigation.navigate('Results')} />
-  </View>
+  return (
+    <View style={styles.screen}>
+      {/* <ScrollView /> */}
+      <View style={styles.earlyStopSwitch}>
+        <Text>Early Stop:</Text>
+        <Switch
+          value={earlyStop}
+          onValueChange={() => {
+            setEarlyStop(!earlyStop);
+          }}
+        />
+      </View>
+      
+      <Button
+        title="Go To Calculation Results"
+        onPress={() => props.navigation.navigate("Results")}
+      />
+    </View>
+  );
 }
+
+DataEntryScreen.navigationOptions = {
+  headerTitle: "Data Entry"
+};
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  earlyStopSwitch: {
+    flexDirection: 'row'
   }
 }); 
 

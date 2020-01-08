@@ -1,10 +1,11 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import {
-  VictoryBar,
   VictoryChart,
   VictoryLine,
-  VictoryTheme
+  VictoryTheme,
+  VictoryAxis,
+  VictoryLabel
 } from "victory-native";
 
 import generateRGBstring from '../functions/generateRGBstring';
@@ -57,7 +58,10 @@ const Plot = props => {
 
   return (
     <View style={styles.container}>
-      <VictoryChart width={350} theme={VictoryTheme.material}>
+      <VictoryChart height={300} width={350} theme={VictoryTheme.material} >
+        <VictoryLabel text="PK Curve" x={175} y={30} textAnchor="middle"/>
+        <VictoryAxis label="time" style={{ axisLabel: {padding: 27} }}/>
+        <VictoryAxis dependentAxis label="concentration" style={{ axisLabel: {padding: 33} }}/>
         {fillLines(props.data)}
       </VictoryChart>
     </View>
@@ -66,10 +70,8 @@ const Plot = props => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f5fcff"
   }
 });
 
