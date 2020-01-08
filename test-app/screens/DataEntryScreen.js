@@ -8,6 +8,7 @@ import yamamotoFunctionPartialSSearlyStop from '../functions/yamamotoFunctionPar
 import yamamotoFunctionPartial from '../functions/yamamotoFunctionPartial';
 import ode1SSearlyStop from '../functions/ode1SSearlyStop';
 import ode1 from '../functions/ode1';
+import DataInput from '../components/DataInput';
 
 import { calculate } from '../store/actions/calculate';
 
@@ -100,9 +101,14 @@ const DataEntryScreen = props => {
 
   dispatch(calculate(results));
 
+  const printStuff = value => {
+    console.log(value.nativeEvent.text);
+  }
+
   return (
     <View style={styles.screen}>
       {/* <ScrollView /> */}
+      <DataInput label={"Test: "} printStuff={printStuff}/>
       <View style={styles.earlyStopSwitch}>
         <Text>Early Stop:</Text>
         <Switch
