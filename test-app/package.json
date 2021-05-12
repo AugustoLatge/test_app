@@ -11,7 +11,7 @@
     "expo": "^35.0.0",
     "expo-cli": "^3.11.1",
     "global": "^4.4.0",
-    "mathjs": "^6.2.5",
+    "mathjs": "^7.5.1",
     "ode45-cash-karp": "^1.1.0",
     "random-normal": "^1.0.0",
     "react": "16.8.3",
